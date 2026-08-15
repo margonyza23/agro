@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Щоденник агронома</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #4CAF50; }
+    label { display: block; margin-top: 10px; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 10px; padding: 10px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+    .entry { background: white; padding: 10px; margin-top: 10px; border: 1px solid #ccc; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #dcedc8; }
+  </style>
+</head>
+<body>
+<!-- Меню-бургер -->
+<nav style="background-color:#333; padding:10px; position:relative;">
+  <!-- Іконка бургер -->
+  <button onclick="toggleMenu()" style="background:none; border:none; color:black; font-size:24px; cursor:pointer; position:absolute; right:10px; top:10px;">
+    ☰
+  </button>
+
+  <!-- Приховане меню (бокова панель) -->
+  <div id="burgerMenu" style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#333; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5);">
+    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
+    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
+    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
+    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
+    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
+    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
+    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
+    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
+    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
+    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
+    <hr style="border:0; border-top:1px solid #555;">
+    <a href="register.html" style="background:#4CAF50; color:white; display:block; padding:10px; margin-top:5px; text-decoration:none; border-radius:4px;">Реєстрація</a>
+    <a href="login.html" style="background:#2196F3; color:white; display:block; padding:10px; margin-top:5px; text-decoration:none; border-radius:4px;">Вхід</a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("burgerMenu");
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+
+  <h1>Щоденник агронома</h1>
+  
+  <label for="crop">Культура:</label>
+  <select id="crop">
+    <option value="">-- Оберіть культуру --</option>
+    <option value="пшениця">Пшениця</option>
+    <option value="овес">Овес</option>
+    <option value="ячмінь">Ячмінь</option>
+    <option value="соя">Соя</option>
+    <option value="кукурудза">Кукурудза</option>
+    <option value="картопля">Картопля</option>
+    <option value="соняшник">Соняшник</option>
+    <option value="ріпак">Ріпак</option>
+    <option value="гречка">Гречка</option>
+    <option value="буряк">Буряк</option>
+    <option value="люцерна">Люцерна</option>
+    <option value="горох">Горох</option>
+    <option value="льон">Льон</option>
+    <option value="конюшина">Конюшина</option>
+    <option value="жито">Жито</option>
+    <option value="просо">Просо</option>
+    <option value="нут">Нут</option>
+    <option value="сорго">Сорго</option>
+  </select>
+  
+  <label for="date">Дата:</label>
+  <input type="date" id="date">
+  
+  <label for="note">Нотатка:</label>
+  <textarea id="note"></textarea>
+  
+  <button onclick="addEntry()">Додати запис</button>
+  
+  <h2>Записи:</h2>
+  <div id="entries"></div>
+  
+  <script>
+    function getHints(crop) {
+      const hints = {
+        'пшениця': { посів:'вересень-жовтень', добрива:'азотні, фосфорні', полив:'помірний', шкідники:'жужелиця', урожайність:'4–6 т/га' },
+        'овес': { посів:'рання весна', добрива:'азотні помірно', полив:'мінімальний', шкідники:'попелиці', урожайність:'2–3 т/га' },
+        'ячмінь': { посів:'весна', добрива:'азотні, калійні', полив:'важливий у колосінні', шкідники:'трипси', урожайність:'3–5 т/га' },
+        'соя': { посів:'травень', добрива:'фосфорні, калійні', полив:'регулярний', шкідники:'совка', урожайність:'2–3 т/га' },
+        'кукурудза': { посів:'квітень-травень', добрива:'азотні багато', полив:'регулярний', шкідники:'метелик', урожайність:'6–10 т/га' },
+        'картопля': { посів:'квітень-травень', добрива:'органічні, калійні', полив:'регулярний', шкідники:'колорадський жук', урожайність:'20–30 т/га' },
+        'соняшник': { посів:'квітень', добрива:'азотні, калійні', полив:'помірний', шкідники:'міль', урожайність:'2–3 т/га' },
+        'ріпак': { посів:'серпень', добрива:'азотні, сірковмісні', полив:'помірний', шкідники:'квіткоїд', урожайність:'3–4 т/га' },
+        'гречка': { посів:'травень-червень', добрива:'фосфорні', полив:'мінімальний', шкідники:'клопи', урожайність:'1–2 т/га' },
+        'буряк': { посів:'квітень', добрива:'азотні, калійні', полив:'регулярний', шкідники:'довгоносик', урожайність:'40–60 т/га' },
+        'люцерна': { посів:'весна', добрива:'фосфорні', полив:'регулярний', шкідники:'довгоносик', урожайність:'10–15 т/га зеленої маси' },
+        'горох': { посів:'рання весна', добрива:'фосфорні, калійні', полив:'помірний', шкідники:'зернівка', урожайність:'2–3 т/га' },
+        'льон': { посів:'весна', добрива:'азотні мало', полив:'помірний', шкідники:'блішка', урожайність:'1–2 т/га' },
+        'конюшина': { посів:'весна', добрива:'фосфорні, калійні', полив:'регулярний', шкідники:'довгоносик', урожайність:'5–7 т/га зеленої маси' },
+        'жито': { посів:'осінь', добрива:'азотні', полив:'мінімальний', шкідники:'житоїд', урожайність:'3–5 т/га' },
+        'просо': { посів:'травень', добрива:'азотні, фосфорні', полив:'помірний', шкідники:'комарик', урожайність:'2–3 т/га' },
+        'нут': { посів:'весна', добрива:'фосфорні', полив:'помірний', шкідники:'міль', урожайність:'1–2 т/га' },
+        'сорго': { посів:'травень-червень', добрива:'азотні', полив:'помірний', шкідники:'комарик', урожайність:'3–5 т/га' }
+      };
+      return hints[crop] || null;
+    }
+    
+    function addEntry(data = null, save = true) {
+  const crop = data ? data.crop : document.getElementById('crop').value;
+  const date = data ? data.date : document.getElementById('date').value;
+  const note = data ? data.note : document.getElementById('note').value;
+
+  if (!crop || !date || !note) return;
+
+  const entryDiv = document.createElement('div');
+  entryDiv.className = 'entry';
+  entryDiv.innerHTML = `<strong>${date}</strong> — ${crop}<br><span class="note">${note}</span>`;
+
+  // Додаємо таблицю підказок
+  const hints = getHints(crop);
+  if (hints) {
+    let table = "<table><tr><th>Параметр</th><th>Значення</th></tr>";
+    for (let key in hints) {
+      table += `<tr><td>${key}</td><td>${hints[key]}</td></tr>`;
+    }
+    table += "</table>";
+    entryDiv.innerHTML += table;
+  }
+
+  // Кнопки редагування та видалення
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  actions.innerHTML = `
+    <button onclick="editEntry(this)">Редагувати</button>
+    <button onclick="deleteEntry(this)">Видалити</button>
+  `;
+  entryDiv.appendChild(actions);
+
+  document.getElementById('entries').appendChild(entryDiv);
+
+  if (save) saveData();
+
+  document.getElementById('note').value = '';
+  document.getElementById('date').value = '';
+}
+
+// Функція редагування
+function editEntry(button) {
+  const entryDiv = button.parentNode.parentNode;
+  const noteSpan = entryDiv.querySelector('.note');
+  const oldNote = noteSpan.innerText;
+
+  noteSpan.innerHTML = `<textarea>${oldNote}</textarea>`;
+  button.innerText = "Зберегти";
+  button.onclick = function() {
+    const newNote = noteSpan.querySelector('textarea').value;
+    noteSpan.innerText = newNote;
+    button.innerText = "Редагувати";
+    button.onclick = function() { editEntry(button); };
+    saveData();
+  };
+}
+
+// Функція видалення
+function deleteEntry(button) {
+  const entryDiv = button.parentNode.parentNode;
+  entryDiv.remove();
+  saveData();
+}
+
+// Функція збереження у localStorage
+function saveData() {
+  const entries = document.querySelectorAll('.entry');
+  const data = [];
+  entries.forEach(entry => {
+    const date = entry.querySelector('strong').innerText;
+    const crop = entry.innerHTML.split('—')[1].split('<br>')[0].trim();
+    const note = entry.querySelector('.note').innerText;
+    data.push({ date, crop, note });
+  });
+  localStorage.setItem("diaryEntries", JSON.stringify(data));
+}
+
+// Завантаження збережених записів при відкритті сторінки
+window.onload = function() {
+  const saved = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+  saved.forEach(entry => addEntry(entry, false));
+};
+
+</script>
+</body>
+</html>
+``

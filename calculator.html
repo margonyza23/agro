@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Калькулятор</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #4CAF50; text-align: center; }
+    .block { background: #fff; padding: 15px; margin: 15px 0; border: 1px solid #ccc; }
+    input { margin: 5px; padding: 5px; }
+    button { padding: 8px 12px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+<!-- Меню-бургер -->
+<nav style="background-color:#333; padding:10px; position:relative;">
+  <!-- Іконка бургер -->
+  <button onclick="toggleMenu()" style="background:none; border:none; color:black; font-size:24px; cursor:pointer; position:absolute; right:10px; top:10px;">
+    ☰
+  </button>
+
+  <!-- Приховане меню (бокова панель) -->
+  <div id="burgerMenu" style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#333; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5);">
+    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
+    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
+    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
+    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
+    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
+    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
+    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
+    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
+    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
+    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
+    <hr style="border:0; border-top:1px solid #555;">
+    <a href="register.html" style="background:#4CAF50; color:white; display:block; padding:10px; margin-top:5px; text-decoration:none; border-radius:4px;">Реєстрація</a>
+    <a href="login.html" style="background:#2196F3; color:white; display:block; padding:10px; margin-top:5px; text-decoration:none; border-radius:4px;">Вхід</a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("burgerMenu");
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+  <h1>Агро‑калькулятор</h1>
+
+  <!-- Насіння -->
+  <div class="block">
+    <h2>Розрахунок насіння</h2>
+    <input type="number" id="seedArea" placeholder="Площа (га)">
+    <input type="number" id="seedRate" placeholder="Норма висіву (кг/га)">
+    <button onclick="calcSeed()">Розрахувати</button>
+    <p id="seedResult"></p>
+  </div>
+
+  <!-- Добрива -->
+  <div class="block">
+    <h2>Розрахунок добрив</h2>
+    <input type="number" id="fertArea" placeholder="Площа (га)">
+    <input type="number" id="fertRate" placeholder="Норма внесення (кг/га або л/га)">
+    <button onclick="calcFert()">Розрахувати</button>
+    <p id="fertResult"></p>
+  </div>
+
+  <!-- Витрати -->
+  <div class="block">
+    <h2>Розрахунок витрат</h2>
+    <input type="number" id="amount" placeholder="Кількість">
+    <input type="number" id="price" placeholder="Ціна за одиницю (грн)">
+    <button onclick="calcCost()">Розрахувати</button>
+    <p id="costResult"></p>
+  </div>
+
+  <!-- Врожайність -->
+  <div class="block">
+    <h2>Розрахунок врожайності та прибутку</h2>
+    <input type="number" id="harvestArea" placeholder="Площа (га)">
+    <input type="number" id="grossYield" placeholder="Валовий збір (т)">
+    <input type="number" id="sellPrice" placeholder="Ціна реалізації (грн/т)">
+    <button onclick="calcYield()">Розрахувати</button>
+    <p id="yieldResult"></p>
+  </div>
+
+  <!-- Актуальні ціни -->
+<div class="block">
+  <h2>Актуальні ціни на культури</h2>
+  <table border="1" style="width:100%; border-collapse:collapse;">
+    <tr><th>Культура</th><th>Середня ціна (грн/т)</th></tr>
+    <tr><td>Пшениця</td><td id="wheatPrice">9250</td></tr>
+    <tr><td>Кукурудза</td><td id="cornPrice">9250</td></tr>
+    <tr><td>Ячмінь</td><td id="barleyPrice">10250</td></tr>
+    <tr><td>Овес</td><td id="oatsPrice">9000</td></tr>
+    <tr><td>Соняшник</td><td id="sunflowerPrice">17000</td></tr>
+    <tr><td>Ріпак</td><td id="rapeseedPrice">16500</td></tr>
+    <tr><td>Соя</td><td id="soyPrice">15000</td></tr>
+    <tr><td>Гречка</td><td id="buckwheatPrice">12000</td></tr>
+    <tr><td>Цукровий буряк</td><td id="sugarbeetPrice">950</td></tr>
+    <tr><td>Картопля</td><td id="potatoPrice">6000</td></tr>
+  </table>
+
+  <h3>Розрахунок доходу</h3>
+  <select id="cropSelect">
+    <option value="wheat">Пшениця</option>
+    <option value="corn">Кукурудза</option>
+    <option value="barley">Ячмінь</option>
+    <option value="oats">Овес</option>
+    <option value="sunflower">Соняшник</option>
+    <option value="rapeseed">Ріпак</option>
+    <option value="soy">Соя</option>
+    <option value="buckwheat">Гречка</option>
+    <option value="sugarbeet">Цукровий буряк</option>
+    <option value="potato">Картопля</option>
+  </select>
+  <input type="number" id="sellAmount" placeholder="Кількість (т)">
+  <button onclick="calcIncome()">Розрахувати</button>
+  <p id="incomeResult"></p>
+</div>
+
+<script>
+  function calcIncome() {
+    const crop = document.getElementById("cropSelect").value;
+    const amount = document.getElementById("sellAmount").value;
+    let price = 0;
+
+    if (crop === "wheat") price = document.getElementById("wheatPrice").innerText;
+    if (crop === "corn") price = document.getElementById("cornPrice").innerText;
+    if (crop === "barley") price = document.getElementById("barleyPrice").innerText;
+    if (crop === "oats") price = document.getElementById("oatsPrice").innerText;
+    if (crop === "sunflower") price = document.getElementById("sunflowerPrice").innerText;
+    if (crop === "rapeseed") price = document.getElementById("rapeseedPrice").innerText;
+    if (crop === "soy") price = document.getElementById("soyPrice").innerText;
+    if (crop === "buckwheat") price = document.getElementById("buckwheatPrice").innerText;
+    if (crop === "sugarbeet") price = document.getElementById("sugarbeetPrice").innerText;
+    if (crop === "potato") price = document.getElementById("potatoPrice").innerText;
+
+    const income = amount * price;
+    document.getElementById("incomeResult").innerText =
+      "Можливий дохід: " + income + " грн";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Урожай</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #4CAF50; text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #dcedc8; }
+    input { padding: 5px; margin: 5px; }
+    button { padding: 8px 12px; background: #4CAF50; color: white; border: none; cursor: pointer; margin: 5px; }
+    button:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+<!-- Меню-бургер -->
+<nav style="background-color:#333; padding:10px; position:relative;">
+  <!-- Іконка бургер -->
+  <button onclick="toggleMenu()" style="background:none; border:none; color:black; font-size:24px; cursor:pointer; position:absolute; right:10px; top:10px;">
+    ☰
+  </button>
+
+  <!-- Приховане меню (бокова панель) -->
+  <div id="burgerMenu" style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#333; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5);">
+    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
+    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
+    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
+    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
+    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
+    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
+    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
+    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
+    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
+    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
+    <hr style="border:0; border-top:1px solid #555;">
+    <a href="register.html" style="background:#4CAF50; color:white; display:block; padding:10px; margin-top:5px; text-decoration:none; border-radius:4px;">Реєстрація</a>
+    <a href="login.html" style="background:#2196F3; color:white; display:block; padding:10px; margin-top:5px; text-decoration:none; border-radius:4px;">Вхід</a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("burgerMenu");
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+  }
+</script>
+  <h1>Таблиця урожаю</h1>
+
+  <div>
+    <input type="date" id="date" placeholder="Дата збору">
+    <input type="text" id="field" placeholder="Поле">
+    <input type="text" id="crop" placeholder="Культура">
+    <input type="number" id="area" placeholder="Площа (га)">
+    <input type="number" id="gross" placeholder="Валовий збір (т)">
+    <input type="number" id="yield" placeholder="Врожайність (т/га)">
+    <input type="number" id="moisture" placeholder="Вологість (%)">
+    <input type="text" id="quality" placeholder="Клас якості">
+    <input type="text" id="storage" placeholder="Куди реалізовано / склад">
+    <input type="text" id="notes" placeholder="Примітки">
+    <button onclick="addRow()">Додати рядок</button>
+  </div>
+
+  <table id="harvestTable">
+    <tr>
+      <th>Дата збору</th>
+      <th>Поле</th>
+      <th>Культура</th>
+      <th>Площа (га)</th>
+      <th>Валовий збір (т)</th>
+      <th>Врожайність (т/га)</th>
+      <th>Вологість (%)</th>
+      <th>Клас якості</th>
+      <th>Куди реалізовано / склад</th>
+      <th>Примітки</th>
+      <th>Дії</th>
+    </tr>
+  </table>
+
+  <script>
+    window.onload = function() {
+      const saved = JSON.parse(localStorage.getItem("harvestData")) || [];
+      saved.forEach(row => addRow(row, false));
+    };
+
+    function addRow(data = null, save = true) {
+      const table = document.getElementById("harvestTable");
+      const row = table.insertRow();
+
+      const date = data ? data.date : document.getElementById("date").value;
+      const field = data ? data.field : document.getElementById("field").value;
+      const crop = data ? data.crop : document.getElementById("crop").value;
+      const area = data ? data.area : document.getElementById("area").value;
+      const gross = data ? data.gross : document.getElementById("gross").value;
+      const yieldVal = data ? data.yield : document.getElementById("yield").value;
+      const moisture = data ? data.moisture : document.getElementById("moisture").value;
+      const quality = data ? data.quality : document.getElementById("quality").value;
+      const storage = data ? data.storage : document.getElementById("storage").value;
+      const notes = data ? data.notes : document.getElementById("notes").value;
+
+      const values = [date, field, crop, area, gross, yieldVal, moisture, quality, storage, notes];
+      values.forEach(v => row.insertCell().innerText = v);
+
+      const actions = row.insertCell();
+      actions.innerHTML = `
+        <button onclick="editRow(this)">Редагувати</button>
+        <button onclick="deleteRow(this)">Видалити</button>
+      `;
+
+      if (save) saveData();
+
+      document.querySelectorAll('input').forEach(i => i.value = '');
+    }
+
+    function editRow(button) {
+      const row = button.parentNode.parentNode;
+      const cells = row.getElementsByTagName("td");
+
+      for (let i = 0; i < cells.length - 1; i++) {
+        const value = cells[i].innerText;
+        cells[i].innerHTML = `<input value="${value}">`;
+      }
+
+      button.innerText = "Зберегти";
+      button.onclick = function() {
+        for (let i = 0; i < cells.length - 1; i++) {
+          const input = cells[i].querySelector("input");
+          cells[i].innerText = input.value;
+        }
+        button.innerText = "Редагувати";
+        button.onclick = function() { editRow(button); };
+        saveData();
+      };
+    }
+
+    function deleteRow(button) {
+      const row = button.parentNode.parentNode;
+      row.parentNode.removeChild(row);
+      saveData();
+    }
+
+    function saveData() {
+      const table = document.getElementById("harvestTable");
+      const rows = table.rows;
+      const data = [];
+
+      for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].cells;
+        data.push({
+          date: cells[0].innerText,
+          field: cells[1].innerText,
+          crop: cells[2].innerText,
+          area: cells[3].innerText,
+          gross: cells[4].innerText,
+          yield: cells[5].innerText,
+          moisture: cells[6].innerText,
+          quality: cells[7].innerText,
+          storage: cells[8].innerText,
+          notes: cells[9].innerText
+        });
+      }
+
+      localStorage.setItem("harvestData", JSON.stringify(data));
+    }
+  </script>
+</body>
+</html>

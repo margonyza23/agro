@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Вхід</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    h1 { color: #4CAF50; text-align: center; }
+    .block { background: #fff; padding: 15px; margin: 15px auto; border: 1px solid #ccc; width: 300px; }
+    input { margin: 5px; padding: 8px; width: 90%; }
+    button { padding: 8px 12px; background: #4CAF50; color: white; border: none; cursor: pointer; width: 100%; }
+    button:hover { background: #45a049; }
+    #loginResult { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Вхід у систему</h1>
+
+  <div class="block">
+    <form id="loginForm">
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Пароль" required>
+      <button type="submit">Увійти</button>
+    </form>
+    <p id="loginResult"></p>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      const userData = localStorage.getItem("user_" + email);
+
+      if (userData) {
+        const user = JSON.parse(userData);
+        if (user.password === password) {
+          // Зберігаємо активного користувача
+          localStorage.setItem("activeUser", JSON.stringify(user));
+
+          // Перехід на головну сторінку
+          window.location.href = "index.html";
+        } else {
+          document.getElementById("loginResult").innerText = "❌ Неправильний пароль!";
+        }
+      } else {
+        document.getElementById("loginResult").innerText = "❌ Користувача з таким email не знайдено!";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Агро-сайт для тата</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
+    header { background-color: #4CAF50; color: white; padding: 15px; text-align: center; }
+    nav { background-color: #333; display: flex; flex-wrap: wrap; justify-content: center; }
+    nav a { color: white; padding: 14px 20px; text-decoration: none; }
+    nav a:hover { background-color: #4CAF50; }
+    main { padding: 20px; text-align: center; }
+    .card-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 30px; }
+    .card { background: white; border: 1px solid #ccc; border-radius: 8px; width: 250px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .card h3 { color: #4CAF50; }
+    .card a { text-decoration: none; color: #333; }
+    footer { background-color: #333; color: white; text-align: center; padding: 10px; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Агро-сайт </h1>
+    <p>Твій помічник у полі 🌾</p>
+<p id="welcomeUser" style="font-weight:bold; color:yellow;"></p>
+<button id="logoutBtn" style="display:none; background:#f44336; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">
+    Вийти
+  </button>
+<script>
+  window.onload = function() {
+    const activeUser = JSON.parse(localStorage.getItem("activeUser"));
+    if (activeUser) {
+      document.getElementById("welcomeUser").innerText = "Вітаємо, " + activeUser.username + "!";
+    }
+  };
+</script>
+
+  </header>
+
+ <<!-- 🔗 Навігаційне меню -->
+<nav style="background-color:#333; display:flex; align-items:center; justify-content:center; position:relative;">
+  <div style="display:flex; flex-wrap:wrap; justify-content:center;">
+    <a href="index.html">Головна</a>
+    <a href="diary.html">Щоденник</a>
+    <a href="calculator.html">Калькулятори</a>
+    <a href="knowledge.html">База знань</a>
+    <a href="gallery.html">Галерея</a>
+    <a href="fields.html">Поля</a>
+    <a href="sowing.html">Посівна</a>
+    <a href="equipment.html">Техніка</a>
+    <a href="expenses.html">Витрати</a>
+    <a href="harvest.html">Урожай</a>
+  </div>
+
+  <!-- Іконка меню‑бургера -->
+  <div style="position:absolute; right:10px; top:10px;">
+    <button onclick="toggleMenu()" style="background:none; border:none; color:white; font-size:24px; cursor:pointer;">☰</button>
+  </div>
+
+  <!-- Приховане меню з кнопками -->
+  <div id="userMenu" style="display:none; position:absolute; right:10px; top:50px; background:#333; border-radius:6px; padding:10px;">
+    <a href="register.html" style="background:#4CAF50; color:white; padding:8px 12px; margin:4px; text-decoration:none; border-radius:4px; display:block;">Реєстрація</a>
+    <a href="login.html" style="background:#2196F3; color:white; padding:8px 12px; margin:4px; text-decoration:none; border-radius:4px; display:block;">Вхід</a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("userMenu");
+    menu.style.display = menu.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+
+  <main>
+    <h2>Ласкаво просимо!</h2>
+    <p>Оберіть розділ, щоб переглянути або внести дані:</p>
+
+    <div class="card-container">
+      <div class="card"><h3>Щоденник</h3><p>Записуй свої спостереження, дати посіву та догляду за культурами.</p><a href="diary.html">Перейти →</a></div>
+      <div class="card"><h3>Калькулятори</h3><p>Розрахуй кількість насіння, добрив або води для поливу.</p><a href="#">Перейти →</a></div>
+      <div class="card"><h3>База знань</h3><p>Довідник про культури, шкідників і добрива.</p><a href="#">Перейти →</a></div>
+      <div class="card"><h3>Галерея</h3><p>Фото врожаю, полів і техніки — усе в одному місці.</p><a href="#">Перейти →</a></div>
+      <div class="card"><h3>Поля</h3><p>Інформація про площі, культури, тип ґрунту.</p><a href="fields.html">Перейти →</a></div>
+      <div class="card"><h3>Посівна</h3><p>Дані про посіви, сорти та витрати на насіння.</p><a href="sowing.html">Перейти →</a></div>
+      <div class="card"><h3>Техніка</h3><p>Облік використання техніки та пального.</p><a href="equipment.html">Перейти →</a></div>
+      <div class="card"><h3>Витрати</h3><p>Усі витрати на добрива, ЗЗР, паливо тощо.</p><a href="expenses.html">Перейти →</a></div>
+      <div class="card"><h3>Урожай</h3><p>Результати збору, врожайність і реалізація.</p><a href="harvest.html">Перейти →</a></div>
+    </div>
+  </main>
+
+    <footer>
+    <p>© 2026 Агро-сайт для тата</p>
+  </footer>
+
+  <script>
+    window.onload = function() {
+      const activeUser = JSON.parse(localStorage.getItem("activeUser"));
+      if (activeUser) {
+        document.getElementById("welcomeUser").innerText = "Вітаємо, " + activeUser.username + "!";
+        document.getElementById("logoutBtn").style.display = "inline-block";
+      }
+    };
+
+    document.getElementById("logoutBtn").addEventListener("click", function() {
+      // Видаляємо активного користувача
+      localStorage.removeItem("activeUser");
+
+      // Перехід на сторінку входу
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>
+
