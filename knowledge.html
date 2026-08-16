@@ -53,6 +53,17 @@
       <tr><th>Культура</th><th>Посів</th><th>Добрива</th><th>Шкідники</th><th>Ціна</th></tr>
     </table>
 
+     <div class="form-block" style="margin-top:30px; text-align:left;">
+  <h3>Коментарі для культури</h3>
+  <select id="cropSelect"></select><br><br>
+
+  <textarea id="commentInput" placeholder="Залиште свій досвід або питання..." style="width:100%; height:80px;"></textarea><br>
+  <button onclick="addComment()">Додати коментар</button>
+
+  <h4>Список коментарів:</h4>
+  <ul id="commentList"></ul>
+</div>
+
     <!-- Форма додавання нової культури -->
     <div class="form-block">
       <h3>Додати нову культуру</h3>
@@ -63,6 +74,9 @@
       <input type="text" id="newPrice" placeholder="Ціна"><br>
       <button onclick="addCrop()">Додати</button>
     </div>
+    
+
+
   </main>
 
   <footer>
@@ -138,6 +152,57 @@
 
     // завантаження таблиці при відкритті сторінки
     window.onload = loadTable;
+    let commentsByCrop = JSON.parse(localStorage.getItem("commentsByCrop")) || {};
+
+function loadCropOptions() {
+  const select = document.getElementById("cropSelect");
+  select.innerHTML = "";
+  crops.forEach(crop => {
+    const option = document.createElement("option");
+    option.value = crop.name;
+    option.innerText = crop.name;
+    select.appendChild(option);
+  });
+}
+
+function loadComments() {
+  const crop = document.getElementById("cropSelect").value;
+  const list = document.getElementById("commentList");
+  list.innerHTML = "";
+
+  const cropComments = commentsByCrop[crop] || [];
+  cropComments.forEach(c => {
+    const li = document.createElement("li");
+    li.innerText = c;
+    list.appendChild(li);
+  });
+}
+
+function addComment() {
+  const crop = document.getElementById("cropSelect").value;
+  const text = document.getElementById("commentInput").value.trim();
+  if (!text) return;
+
+  if (!commentsByCrop[crop]) {
+    commentsByCrop[crop] = [];
+  }
+  commentsByCrop[crop].push(text);
+  localStorage.setItem("commentsByCrop", JSON.stringify(commentsByCrop));
+
+  document.getElementById("commentInput").value = "";
+  loadComments();
+}
+
+// при зміні культури оновлюємо список
+document.getElementById("cropSelect").addEventListener("change", loadComments);
+
+// при завантаженні сторінки
+window.onload = function() {
+  loadTable();
+  loadCropOptions();
+  loadComments();
+};
+
   </script>
   <!-- Іконка-підказка -->
 <div style="position:fixed; bottom:20px; right:20px;">
