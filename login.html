@@ -31,21 +31,35 @@
       const email = document.getElementById("loginEmail").value.trim();
       const password = document.getElementById("loginPassword").value.trim();
 
+      if (!email || !password) {
+        document.getElementById("loginResult").innerText = "❌ Заповніть усі поля!";
+        return;
+      }
+
+      // Отримуємо дані користувача з localStorage
       const userData = localStorage.getItem("user_" + email);
 
-      if (userData) {
-        const user = JSON.parse(userData);
-        if (user.password === password) {
-          // Зберігаємо активного користувача
-          localStorage.setItem("activeUser", JSON.stringify(user));
-
-          // Перехід на головну сторінку
-          window.location.href = "index.html";
-        } else {
-          document.getElementById("loginResult").innerText = "❌ Неправильний пароль!";
-        }
-      } else {
+      if (!userData) {
         document.getElementById("loginResult").innerText = "❌ Користувача з таким email не знайдено!";
+        return;
+      }
+
+      const user = JSON.parse(userData);
+
+      if (user.password === password) {
+        // Зберігаємо активного користувача
+        localStorage.setItem("activeUser", JSON.stringify(user));
+
+        // Повідомлення про успішний вхід
+        document.getElementById("loginResult").innerText =
+          "✅ Вхід виконано! Вітаємо, " + user.username + ". Перехід на головну...";
+
+        // Автоматичний перехід через 2 секунди
+        setTimeout(function() {
+          window.location.href = "index.html";
+        }, 2000);
+      } else {
+        document.getElementById("loginResult").innerText = "❌ Неправильний пароль!";
       }
     });
   </script>

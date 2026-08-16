@@ -27,43 +27,44 @@
   </div>
 
   <script>
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+  document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-      if (!username || !email || !password) {
-        document.getElementById("registerResult").innerText = "❌ Заповніть усі поля!";
-        return;
-      }
+    if (!username || !email || !password) {
+      document.getElementById("registerResult").innerText = "❌ Заповніть усі поля!";
+      return;
+    }
 
-      // Перевіряємо, чи користувач вже існує
-      if (localStorage.getItem("user_" + email)) {
-        document.getElementById("registerResult").innerText =
-          "❌ Користувач з таким email вже існує!";
-        return;
-      }
-
-      // Зберігаємо дані у localStorage
-      const user = { username, email, password };
-      localStorage.setItem("user_" + email, JSON.stringify(user));
-
-      // Зберігаємо активного користувача
-      localStorage.setItem("activeUser", JSON.stringify(user));
-
-      // Повідомлення про успішну реєстрацію
+    // Перевіряємо, чи користувач вже існує
+    if (localStorage.getItem("user_" + email)) {
       document.getElementById("registerResult").innerText =
-        "✅ Користувач " + username + " успішно зареєстрований! Перехід на головну...";
+        "❌ Користувач з таким email вже існує!";
+      return;
+    }
 
-      // Очищаємо форму
-      document.getElementById("registerForm").reset();
+    // Зберігаємо дані у localStorage
+    const user = { username, email, password };
+    localStorage.setItem("user_" + email, JSON.stringify(user));
 
-      // Автоматичний перехід через 3 секунди
-      setTimeout(function() {
-        window.location.href = "index.html";
-      }, 3000);
-    });
-  </script>
+    // Зберігаємо активного користувача
+    localStorage.setItem("activeUser", JSON.stringify(user));
+
+    // Повідомлення про успішну реєстрацію
+    document.getElementById("registerResult").innerText =
+      "✅ Користувач " + username + " успішно зареєстрований! Перехід на головну...";
+
+    // Очищаємо форму
+    document.getElementById("registerForm").reset();
+
+    // Автоматичний перехід через 3 секунди
+    setTimeout(function() {
+      window.location.href = "index.html";
+    }, 3000);
+  });
+</script>
+
 </body>
 </html>

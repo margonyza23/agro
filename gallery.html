@@ -1,0 +1,34 @@
+<h1>Галерея</h1>
+<input type="file" id="uploadImage" accept="image/*">
+<div id="galleryContainer" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+
+<script>
+  const galleryContainer = document.getElementById("galleryContainer");
+
+  function loadGallery() {
+    const images = JSON.parse(localStorage.getItem("gallery")) || [];
+    galleryContainer.innerHTML = "";
+    images.forEach(src => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.style.width = "150px";
+      img.style.border = "1px solid #ccc";
+      img.style.borderRadius = "6px";
+      galleryContainer.appendChild(img);
+    });
+  }
+
+  document.getElementById("uploadImage").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const images = JSON.parse(localStorage.getItem("gallery")) || [];
+      images.push(event.target.result);
+      localStorage.setItem("gallery", JSON.stringify(images));
+      loadGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  window.onload = loadGallery;
+</script>
