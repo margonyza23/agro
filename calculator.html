@@ -2,101 +2,102 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Калькулятор</title>
+  <title>Агро‑калькулятор</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- адаптивність -->
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    h1 { color: #4CAF50; text-align: center; }
-    .block { background: #fff; padding: 15px; margin: 15px 0; border: 1px solid #ccc; }
-    input { margin: 5px; padding: 5px; }
-    button { padding: 8px 12px; background: #4CAF50; color: white; border: none; cursor: pointer; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin:0; padding:0; }
+    h1 { color: #4CAF50; text-align: center; padding:20px; }
+    .block { background: #fff; padding: 15px; margin: 15px; border: 1px solid #ccc; border-radius:6px; }
+    input, select { margin: 5px 0; padding: 10px; width: 100%; box-sizing:border-box; }
+    button { padding: 10px; background: #4CAF50; color: white; border: none; cursor: pointer; width:100%; border-radius:4px; }
     button:hover { background: #45a049; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+    th { background:#4CAF50; color:white; }
+
+    @media (max-width: 768px) {
+      h1 { font-size:22px; }
+      .block { margin:10px; }
+      table { font-size:14px; }
+      button { font-size:16px; }
+    }
+
+    nav { background-color:#333; padding:10px; position:relative; }
+    nav button { background:none; border:none; color:white; font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px; }
+    #menuOverlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:998; }
+    #burgerMenu { 
+      display:none; position:fixed; top:0; right:0; height:100%; width:80%; max-width:300px; 
+      background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999; 
+      transition:transform 0.3s ease; transform:translateX(100%);
+    }
+    #burgerMenu a { color:white; display:block; padding:15px; text-decoration:none; font-size:20px; }
+    #burgerMenu button { background:none; border:none; color:white; font-size:28px; cursor:pointer; position:absolute; left:15px; top:15px; }
   </style>
 </head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <body>
- <!-- Меню-бургер -->
-<nav style="background-color:#333; padding:10px; position:relative;">
-  <!-- Іконка бургер -->
-  <button onclick="toggleMenu()" 
-          style="background:none; border:none; color:rgb(8, 8, 8); font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px;">
-    ☰
-  </button>
 
-  <!-- Приховане меню (бокова панель) -->
-  <div id="burgerMenu" 
-       style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999;">
-    
-    <!-- Кнопка закриття -->
-    <button onclick="toggleMenu()" 
-            style="background:none; border:none; color:white; font-size:24px; cursor:pointer; position:absolute; left:10px; top:10px;">
-      ✖
-    </button>
-
-    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
-    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
-    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
-    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
-    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
-    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
-    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
-    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
-    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
-    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
-    <hr style="border:0; border-top:1px solid #555;">
+<!-- Меню-бургер -->
+<nav>
+  <button onclick="toggleMenu()">☰</button>
+  <div id="menuOverlay" onclick="toggleMenu()"></div>
+  <div id="burgerMenu">
+    <button onclick="toggleMenu()">✖</button>
+    <a href="index.html">Головна</a>
+    <a href="diary.html">Щоденник</a>
+    <a href="calculator.html">Калькулятори</a>
+    <a href="knowledge.html">База знань</a>
+    <a href="gallery.html">Галерея</a>
+    <a href="fields.html">Поля</a>
+    <a href="sowing.html">Посівна</a>
+    <a href="equipment.html">Техніка</a>
+    <a href="expenses.html">Витрати</a>
+    <a href="harvest.html">Урожай</a>
   </div>
 </nav>
 
-<script>
-  function toggleMenu() {
-    const menu = document.getElementById("burgerMenu");
-    menu.style.display = menu.style.display === "none" ? "block" : "none";
-  }
-</script>
+<h1>Агро‑калькулятор</h1>
 
-  <h1>Агро‑калькулятор</h1>
+<!-- Насіння -->
+<div class="block">
+  <h2>Розрахунок насіння</h2>
+  <input type="number" id="seedArea" placeholder="Площа (га)">
+  <input type="number" id="seedRate" placeholder="Норма висіву (кг/га)">
+  <button onclick="calcSeed()">Розрахувати</button>
+  <p id="seedResult"></p>
+</div>
 
-  <!-- Насіння -->
-  <div class="block">
-    <h2>Розрахунок насіння</h2>
-    <input type="number" id="seedArea" placeholder="Площа (га)">
-    <input type="number" id="seedRate" placeholder="Норма висіву (кг/га)">
-    <button onclick="calcSeed()">Розрахувати</button>
-    <p id="seedResult"></p>
-  </div>
+<!-- Добрива -->
+<div class="block">
+  <h2>Розрахунок добрив</h2>
+  <input type="number" id="fertArea" placeholder="Площа (га)">
+  <input type="number" id="fertRate" placeholder="Норма внесення (кг/га або л/га)">
+  <button onclick="calcFert()">Розрахувати</button>
+  <p id="fertResult"></p>
+</div>
 
-  <!-- Добрива -->
-  <div class="block">
-    <h2>Розрахунок добрив</h2>
-    <input type="number" id="fertArea" placeholder="Площа (га)">
-    <input type="number" id="fertRate" placeholder="Норма внесення (кг/га або л/га)">
-    <button onclick="calcFert()">Розрахувати</button>
-    <p id="fertResult"></p>
-  </div>
+<!-- Витрати -->
+<div class="block">
+  <h2>Розрахунок витрат</h2>
+  <input type="number" id="amount" placeholder="Кількість">
+  <input type="number" id="price" placeholder="Ціна за одиницю (грн)">
+  <button onclick="calcCost()">Розрахувати</button>
+  <p id="costResult"></p>
+</div>
 
-  <!-- Витрати -->
-  <div class="block">
-    <h2>Розрахунок витрат</h2>
-    <input type="number" id="amount" placeholder="Кількість">
-    <input type="number" id="price" placeholder="Ціна за одиницю (грн)">
-    <button onclick="calcCost()">Розрахувати</button>
-    <p id="costResult"></p>
-  </div>
+<!-- Врожайність -->
+<div class="block">
+  <h2>Розрахунок врожайності та прибутку</h2>
+  <input type="number" id="harvestArea" placeholder="Площа (га)">
+  <input type="number" id="grossYield" placeholder="Валовий збір (т)">
+  <input type="number" id="sellPrice" placeholder="Ціна реалізації (грн/т)">
+  <button onclick="calcYield()">Розрахувати</button>
+  <p id="yieldResult"></p>
+</div>
 
-  <!-- Врожайність -->
-  <div class="block">
-    <h2>Розрахунок врожайності та прибутку</h2>
-    <input type="number" id="harvestArea" placeholder="Площа (га)">
-    <input type="number" id="grossYield" placeholder="Валовий збір (т)">
-    <input type="number" id="sellPrice" placeholder="Ціна реалізації (грн/т)">
-    <button onclick="calcYield()">Розрахувати</button>
-    <p id="yieldResult"></p>
-  </div>
-
-  <!-- Актуальні ціни -->
+<!-- Актуальні ціни -->
 <div class="block">
   <h2>Актуальні ціни на культури</h2>
-  <table border="1" style="width:100%; border-collapse:collapse;">
+  <table>
     <tr><th>Культура</th><th>Середня ціна (грн/т)</th></tr>
     <tr><td>Пшениця</td><td id="wheatPrice">9250</td></tr>
     <tr><td>Кукурудза</td><td id="cornPrice">9250</td></tr>
@@ -127,29 +128,73 @@
   <button onclick="calcIncome()">Розрахувати</button>
   <p id="incomeResult"></p>
 </div>
-
 <script>
+  function toggleMenu() {
+    const menu = document.getElementById("burgerMenu");
+    const overlay = document.getElementById("menuOverlay");
+    if (menu.style.display === "none" || menu.style.display === "") {
+      menu.style.display = "block";
+      overlay.style.display = "block";
+      setTimeout(() => menu.style.transform = "translateX(0)", 10);
+    } else {
+      menu.style.transform = "translateX(100%)";
+      setTimeout(() => {
+        menu.style.display = "none";
+        overlay.style.display = "none";
+      }, 300);
+    }
+  }
+
+  function calcSeed() {
+    const area = parseFloat(document.getElementById("seedArea").value) || 0;
+    const rate = parseFloat(document.getElementById("seedRate").value) || 0;
+    const result = area * rate;
+    document.getElementById("seedResult").innerText = "Потрібно насіння: " + result + " кг";
+  }
+
+  function calcFert() {
+    const area = parseFloat(document.getElementById("fertArea").value) || 0;
+    const rate = parseFloat(document.getElementById("fertRate").value) || 0;
+    const result = area * rate;
+    document.getElementById("fertResult").innerText = "Потрібно добрив: " + result + " кг/л";
+  }
+
+  function calcCost() {
+    const amount = parseFloat(document.getElementById("amount").value) || 0;
+    const price = parseFloat(document.getElementById("price").value) || 0;
+    const result = amount * price;
+    document.getElementById("costResult").innerText = "Витрати: " + result + " грн";
+  }
+
+  function calcYield() {
+    const area = parseFloat(document.getElementById("harvestArea").value) || 0;
+    const gross = parseFloat(document.getElementById("grossYield").value) || 0;
+    const sellPrice = parseFloat(document.getElementById("sellPrice").value) || 0;
+    const yieldPerHa = area > 0 ? (gross / area) : 0;
+    const income = gross * sellPrice;
+    document.getElementById("yieldResult").innerText = 
+      "Врожайність: " + yieldPerHa.toFixed(2) + " т/га, Прибуток: " + income + " грн";
+  }
+
   function calcIncome() {
     const crop = document.getElementById("cropSelect").value;
-    const amount = document.getElementById("sellAmount").value;
+    const amount = parseFloat(document.getElementById("sellAmount").value) || 0;
     let price = 0;
 
-    if (crop === "wheat") price = document.getElementById("wheatPrice").innerText;
-    if (crop === "corn") price = document.getElementById("cornPrice").innerText;
-    if (crop === "barley") price = document.getElementById("barleyPrice").innerText;
-    if (crop === "oats") price = document.getElementById("oatsPrice").innerText;
-    if (crop === "sunflower") price = document.getElementById("sunflowerPrice").innerText;
-    if (crop === "rapeseed") price = document.getElementById("rapeseedPrice").innerText;
-    if (crop === "soy") price = document.getElementById("soyPrice").innerText;
-    if (crop === "buckwheat") price = document.getElementById("buckwheatPrice").innerText;
-    if (crop === "sugarbeet") price = document.getElementById("sugarbeetPrice").innerText;
-    if (crop === "potato") price = document.getElementById("potatoPrice").innerText;
+    if (crop === "wheat") price = parseFloat(document.getElementById("wheatPrice").innerText);
+    if (crop === "corn") price = parseFloat(document.getElementById("cornPrice").innerText);
+    if (crop === "barley") price = parseFloat(document.getElementById("barleyPrice").innerText);
+    if (crop === "oats") price = parseFloat(document.getElementById("oatsPrice").innerText);
+    if (crop === "sunflower") price = parseFloat(document.getElementById("sunflowerPrice").innerText);
+    if (crop === "rapeseed") price = parseFloat(document.getElementById("rapeseedPrice").innerText);
+    if (crop === "soy") price = parseFloat(document.getElementById("soyPrice").innerText);
+    if (crop === "buckwheat") price = parseFloat(document.getElementById("buckwheatPrice").innerText);
+    if (crop === "sugarbeet") price = parseFloat(document.getElementById("sugarbeetPrice").innerText);
+    if (crop === "potato") price = parseFloat(document.getElementById("potatoPrice").innerText);
 
     const income = amount * price;
-    document.getElementById("incomeResult").innerText =
-      "Можливий дохід: " + income + " грн";
+    document.getElementById("incomeResult").innerText = "Можливий дохід: " + income + " грн";
   }
 </script>
-
 </body>
 </html>
