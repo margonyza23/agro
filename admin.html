@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Адмін панель</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f4f4f4; }
+    header { background:#333; color:white; padding:15px; text-align:center; }
+    main { padding:20px; }
+    .admin-block { background:#fff; padding:15px; border:1px solid #ccc; border-radius:6px; margin-bottom:20px; }
+    button { padding:8px 12px; margin:5px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Адмін панель 🔑</h1>
+    <p>Тільки для адміністратора</p>
+  </header>
+
+  <main>
+    <div class="admin-block">
+      <h3>Керування культурами</h3>
+      <button onclick="clearAllCrops()">Очистити всі культури</button>
+    </div>
+
+    <div class="admin-block">
+      <h3>Керування коментарями</h3>
+      <button onclick="clearAllComments()">Очистити всі коментарі</button>
+    </div>
+
+    <div class="admin-block">
+      <h3>Вихід</h3>
+      <button onclick="logout()">Вийти з акаунта</button>
+    </div>
+  </main>
+
+  <script>
+    // перевірка ролі через activeUser
+    const activeUser = JSON.parse(localStorage.getItem("activeUser"));
+    if (!activeUser || activeUser.role !== "admin") {
+      alert("❌ У вас немає доступу до адмін панелі!");
+      window.location.href = "index.html"; // повертаємо на головну
+    }
+
+    function clearAllCrops() {
+      localStorage.removeItem("crops");
+      alert("✅ Всі культури очищено!");
+    }
+
+    function clearAllComments() {
+      localStorage.removeItem("commentsByCrop");
+      alert("✅ Всі коментарі очищено!");
+    }
+
+    function logout() {
+      localStorage.removeItem("activeUser");
+      alert("Ви вийшли з акаунта!");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

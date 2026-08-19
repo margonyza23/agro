@@ -1,34 +1,169 @@
-<h1>Галерея</h1>
-<input type="file" id="uploadImage" accept="image/*">
-<div id="galleryContainer" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Галерея</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
+    h1 { color:#4CAF50; text-align:center; }
+    #galleryContainer { display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:20px; }
+    .imgWrapper { position:relative; display:inline-block; text-align:center; }
+    .imgWrapper img { width:150px; border:1px solid #ccc; border-radius:6px; cursor:pointer; }
+    .caption { font-size:14px; margin-top:5px; }
+    .delBtn { position:absolute; top:5px; right:5px; background:red; color:white; border:none; cursor:pointer; border-radius:4px; padding:2px 6px; }
+    .categorySelect { margin:10px; padding:8px; }
+  </style>
+</head>
+<body>
+  <!-- Меню-бургер -->
+<nav style="background-color:#333; padding:10px; position:relative;">
+  <!-- Іконка бургер -->
+  <button onclick="toggleMenu()" 
+          style="background:none; border:none; color:rgb(8, 8, 8); font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px;">
+    ☰
+  </button>
+
+  <!-- Приховане меню (бокова панель) -->
+  <div id="burgerMenu" 
+       style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999;">
+    
+    <!-- Кнопка закриття -->
+    <button onclick="toggleMenu()" 
+            style="background:none; border:none; color:white; font-size:24px; cursor:pointer; position:absolute; left:10px; top:10px;">
+      ✖
+    </button>
+
+    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
+    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
+    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
+    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
+    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
+    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
+    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
+    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
+    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
+    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
+    <hr style="border:0; border-top:1px solid #555;">
+  </div>
+</nav>
 
 <script>
-  const galleryContainer = document.getElementById("galleryContainer");
-
-  function loadGallery() {
-    const images = JSON.parse(localStorage.getItem("gallery")) || [];
-    galleryContainer.innerHTML = "";
-    images.forEach(src => {
-      const img = document.createElement("img");
-      img.src = src;
-      img.style.width = "150px";
-      img.style.border = "1px solid #ccc";
-      img.style.borderRadius = "6px";
-      galleryContainer.appendChild(img);
-    });
+  function toggleMenu() {
+    const menu = document.getElementById("burgerMenu");
+    menu.style.display = (menu.style.display === "none" || menu.style.display === "") ? "block" : "none";
   }
-
-  document.getElementById("uploadImage").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const images = JSON.parse(localStorage.getItem("gallery")) || [];
-      images.push(event.target.result);
-      localStorage.setItem("gallery", JSON.stringify(images));
-      loadGallery();
-    };
-    reader.readAsDataURL(file);
-  });
-
-  window.onload = loadGallery;
 </script>
+
+  <h1>Галерея 🌾</h1>
+
+  <!-- Вибір категорії -->
+  <select id="categoryFilter" class="categorySelect">
+    <option value="all">Всі категорії</option>
+    <option value="Поля">Поля</option>
+    <option value="Техніка">Техніка</option>
+    <option value="Урожай">Урожай</option>
+  </select>
+
+  <!-- Завантаження фото -->
+  <input type="file" id="uploadImage" accept="image/*" multiple>
+  <div id="galleryContainer"></div>
+
+  <script>
+    const galleryContainer = document.getElementById("galleryContainer");
+    const categoryFilter = document.getElementById("categoryFilter");
+
+    function loadGallery() {
+      const images = JSON.parse(localStorage.getItem("gallery")) || [];
+      galleryContainer.innerHTML = "";
+
+      // сортуємо за часом (нові зверху)
+      images.sort((a, b) => new Date(b.time) - new Date(a.time));
+
+      const selectedCategory = categoryFilter.value;
+
+      images.forEach((imgObj, index) => {
+        if (selectedCategory !== "all" && imgObj.category !== selectedCategory) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "imgWrapper";
+
+        const img = document.createElement("img");
+        img.src = imgObj.src;
+
+        // перегляд у повному розмірі
+        img.onclick = function() {
+          const bigView = document.createElement("div");
+          bigView.style.position = "fixed";
+          bigView.style.top = "0";
+          bigView.style.left = "0";
+          bigView.style.width = "100%";
+          bigView.style.height = "100%";
+          bigView.style.background = "rgba(0,0,0,0.8)";
+          bigView.style.display = "flex";
+          bigView.style.alignItems = "center";
+          bigView.style.justifyContent = "center";
+          bigView.style.zIndex = "999";
+
+          const bigImg = document.createElement("img");
+          bigImg.src = imgObj.src;
+          bigImg.style.maxWidth = "90%";
+          bigImg.style.maxHeight = "90%";
+          bigImg.style.border = "4px solid white";
+          bigImg.style.borderRadius = "8px";
+
+          bigView.appendChild(bigImg);
+          bigView.onclick = () => bigView.remove();
+          document.body.appendChild(bigView);
+        };
+
+        // підпис
+        const caption = document.createElement("div");
+        caption.className = "caption";
+        caption.innerText = (imgObj.caption || "Без назви") + " [" + (imgObj.category || "Без категорії") + "]";
+
+        // кнопка видалення
+        const delBtn = document.createElement("button");
+        delBtn.className = "delBtn";
+        delBtn.innerText = "🗑";
+        delBtn.onclick = function() {
+          images.splice(index, 1);
+          localStorage.setItem("gallery", JSON.stringify(images));
+          loadGallery();
+        };
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(delBtn);
+        wrapper.appendChild(caption);
+        galleryContainer.appendChild(wrapper);
+      });
+    }
+
+    // мультизавантаження
+    document.getElementById("uploadImage").addEventListener("change", function(e) {
+      const files = e.target.files;
+      const images = JSON.parse(localStorage.getItem("gallery")) || [];
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const caption = prompt("Введіть підпис для фото:", "Моє фото");
+          const category = prompt("Виберіть категорію (Поля, Техніка, Урожай):", "Поля");
+          images.push({
+            src: event.target.result,
+            caption: caption,
+            category: category,
+            time: new Date().toISOString()
+          });
+          localStorage.setItem("gallery", JSON.stringify(images));
+          loadGallery();
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    categoryFilter.addEventListener("change", loadGallery);
+
+    window.onload = loadGallery;
+  </script>
+</body>
+</html>

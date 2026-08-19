@@ -23,25 +23,36 @@
   </header>
 
   <!-- Меню-бургер -->
-  <nav style="background-color:#333; padding:10px; position:relative;">
-    <button onclick="toggleMenu()" style="background:none; border:none; color:black; font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px;">
-      ☰
+<nav style="background-color:#333; padding:10px; position:relative;">
+  <!-- Іконка бургер -->
+  <button onclick="toggleMenu()" 
+          style="background:none; border:none; color:rgb(8, 8, 8); font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px;">
+    ☰
+  </button>
+
+  <!-- Приховане меню (бокова панель) -->
+  <div id="burgerMenu" 
+       style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999;">
+    
+    <!-- Кнопка закриття -->
+    <button onclick="toggleMenu()" 
+            style="background:none; border:none; color:white; font-size:24px; cursor:pointer; position:absolute; left:10px; top:10px;">
+      ✖
     </button>
-    <div id="burgerMenu" style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5);">
-      <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
-      <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
-      <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
-      <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
-      <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
-      <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
-      <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
-      <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
-      <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
-      <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
-      <hr style="border:0; border-top:1px solid #555;">
-      
-    </div>
-  </nav>
+
+    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
+    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
+    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
+    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
+    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
+    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
+    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
+    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
+    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
+    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
+    <hr style="border:0; border-top:1px solid #555;">
+  </div>
+</nav>
 
   <main>
     <h2>База знань</h2>

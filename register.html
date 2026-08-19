@@ -7,7 +7,7 @@
     body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
     h1 { color: #4CAF50; text-align: center; }
     .block { background: #fff; padding: 15px; margin: 15px auto; border: 1px solid #ccc; width: 300px; }
-    input { margin: 5px; padding: 8px; width: 90%; }
+    input, select { margin: 5px; padding: 8px; width: 90%; }
     button { padding: 8px 12px; background: #4CAF50; color: white; border: none; cursor: pointer; width: 100%; }
     button:hover { background: #45a049; }
     #registerResult { margin-top: 10px; font-weight: bold; }
@@ -21,6 +21,13 @@
       <input type="text" id="username" placeholder="Ім'я користувача" required>
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Пароль" required>
+      
+      <!-- Вибір ролі -->
+      <select id="role">
+        <option value="user">Користувач</option>
+        <option value="admin">Адміністратор</option>
+      </select>
+      
       <button type="submit">Зареєструватися</button>
     </form>
     <p id="registerResult"></p>
@@ -32,10 +39,23 @@
     const username = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
+    let role = document.getElementById("role").value;
 
     if (!username || !email || !password) {
       document.getElementById("registerResult").innerText = "❌ Заповніть усі поля!";
       return;
+    }
+
+    // Перевірка правильності email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      document.getElementById("registerResult").innerText = "❌ Введіть правильний email!";
+      return;
+    }
+
+    // Якщо email = твій, то роль завжди admin
+    if (email === "margonyza@gmail.com") {
+      role = "admin";
     }
 
     // Перевіряємо, чи користувач вже існує
@@ -46,7 +66,7 @@
     }
 
     // Зберігаємо дані у localStorage
-    const user = { username, email, password };
+    const user = { username, email, password, role };
     localStorage.setItem("user_" + email, JSON.stringify(user));
 
     // Зберігаємо активного користувача
@@ -54,7 +74,7 @@
 
     // Повідомлення про успішну реєстрацію
     document.getElementById("registerResult").innerText =
-      "✅ Користувач " + username + " успішно зареєстрований! Перехід на головну...";
+      "✅ Користувач " + username + " (" + role + ") успішно зареєстрований! Перехід на головну...";
 
     // Очищаємо форму
     document.getElementById("registerForm").reset();
@@ -64,7 +84,7 @@
       window.location.href = "index.html";
     }, 3000);
   });
-</script>
+  </script>
 
 </body>
 </html>

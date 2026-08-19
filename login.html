@@ -47,17 +47,28 @@
       const user = JSON.parse(userData);
 
       if (user.password === password) {
+        // Якщо email = твій, то завжди адмін
+        if (email === "margonyza@gmail.com") {
+          user.role = "admin";
+        }
+
         // Зберігаємо активного користувача
         localStorage.setItem("activeUser", JSON.stringify(user));
 
-        // Повідомлення про успішний вхід
-        document.getElementById("loginResult").innerText =
-          "✅ Вхід виконано! Вітаємо, " + user.username + ". Перехід на головну...";
-
-        // Автоматичний перехід через 2 секунди
-        setTimeout(function() {
-          window.location.href = "index.html";
-        }, 2000);
+        // Перевіряємо роль
+        if (user.role === "admin") {
+          document.getElementById("loginResult").innerText =
+            "✅ Вхід виконано! Ви увійшли як адміністратор. Перехід у адмін-панель...";
+          setTimeout(function() {
+            window.location.href = "admin.html";
+          }, 2000);
+        } else {
+          document.getElementById("loginResult").innerText =
+            "✅ Вхід виконано! Вітаємо, " + user.username + ". Перехід на головну...";
+          setTimeout(function() {
+            window.location.href = "index.html";
+          }, 2000);
+        }
       } else {
         document.getElementById("loginResult").innerText = "❌ Неправильний пароль!";
       }
