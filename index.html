@@ -32,6 +32,50 @@
     #burgerMenu button { background:none; border:none; color:white; font-size:28px; cursor:pointer; position:absolute; left:15px; top:15px; }
   </style>
 </head>
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById("burgerMenu");
+    const overlay = document.getElementById("menuOverlay");
+    if (menu.style.display === "none" || menu.style.display === "") {
+      menu.style.display = "block";
+      overlay.style.display = "block";
+      setTimeout(() => menu.style.transform = "translateX(0)", 10);
+    } else {
+      menu.style.transform = "translateX(100%)";
+      setTimeout(() => {
+        menu.style.display = "none";
+        overlay.style.display = "none";
+      }, 300);
+    }
+  }
+
+  window.onload = function() {
+    const activeUser = JSON.parse(localStorage.getItem("activeUser"));
+    const loginBtn = document.querySelector("#burgerMenu a[href='login.html']");
+    const registerBtn = document.querySelector("#burgerMenu a[href='register.html']");
+
+    if (activeUser) {
+      // Приховуємо "Реєстрація"
+      if (registerBtn) registerBtn.style.display = "none";
+
+      // Замінюємо "Вхід" на "Вийти"
+      if (loginBtn) {
+        loginBtn.innerText = "Вийти";
+        loginBtn.style.background = "#f44336"; // червоний
+        loginBtn.onclick = function(e) {
+          e.preventDefault();
+          localStorage.removeItem("activeUser");
+          window.location.href = "login.html";
+        };
+      }
+
+      // Привітання
+      const welcome = document.getElementById("welcomeUser");
+      if (welcome) welcome.innerText = "Вітаємо, " + activeUser.username + "!";
+    }
+  };
+</script>
+
 <body>
 
 <header>
@@ -41,23 +85,50 @@
 </header>
 
 <!-- Меню-бургер -->
-<nav>
-  <button onclick="toggleMenu()">☰</button>
-  <div id="menuOverlay" onclick="toggleMenu()"></div>
-  <div id="burgerMenu">
-    <button onclick="toggleMenu()">✖</button>
-    <a href="index.html">Головна</a>
-    <a href="diary.html">Щоденник</a>
-    <a href="calculator.html">Калькулятори</a>
-    <a href="knowledge.html">База знань</a>
-    <a href="gallery.html">Галерея</a>
-    <a href="fields.html">Поля</a>
-    <a href="sowing.html">Посівна</a>
-    <a href="equipment.html">Техніка</a>
-    <a href="expenses.html">Витрати</a>
-    <a href="harvest.html">Урожай</a>
-    <a href="register.html">Реєстрація</a>
-    <a href="login.html">Вхід</a>
+<nav style="background-color:#333; padding:10px; position:relative;">
+  <!-- Іконка бургер (чорна) -->
+  <button onclick="toggleMenu()" 
+          style="background:none; border:none; color:black; font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px;">
+    ☰
+  </button>
+
+  <!-- Фон для закриття -->
+  <div id="menuOverlay" 
+       style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:998;"
+       onclick="toggleMenu()"></div>
+
+  <!-- Приховане меню -->
+  <div id="burgerMenu" 
+       style="display:none; position:fixed; top:0; right:0; height:100%; width:80%; max-width:300px; background:#222; padding:20px; 
+              box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999; transition:transform 0.3s ease; transform:translateX(100%);">
+
+    <!-- Кнопка закриття -->
+    <button onclick="toggleMenu()" 
+            style="background:none; border:none; color:white; font-size:28px; cursor:pointer; position:absolute; left:15px; top:15px;">
+      ✖
+    </button>
+
+    <!-- Основні посилання -->
+    <a href="index.html" style="color:white; display:block; padding:15px; text-decoration:none;">Головна</a>
+    <a href="diary.html" style="color:white; display:block; padding:15px; text-decoration:none;">Щоденник</a>
+    <a href="calculator.html" style="color:white; display:block; padding:15px; text-decoration:none;">Калькулятори</a>
+    <a href="knowledge.html" style="color:white; display:block; padding:15px; text-decoration:none;">База знань</a>
+    <a href="gallery.html" style="color:white; display:block; padding:15px; text-decoration:none;">Галерея</a>
+    <a href="fields.html" style="color:white; display:block; padding:15px; text-decoration:none;">Поля</a>
+    <a href="sowing.html" style="color:white; display:block; padding:15px; text-decoration:none;">Посівна</a>
+    <a href="equipment.html" style="color:white; display:block; padding:15px; text-decoration:none;">Техніка</a>
+    <a href="expenses.html" style="color:white; display:block; padding:15px; text-decoration:none;">Витрати</a>
+    <a href="harvest.html" style="color:white; display:block; padding:15px; text-decoration:none;">Урожай</a>
+
+    <hr style="border:0; border-top:1px solid #555; margin:10px 0;">
+
+    <!-- Виділені кнопки -->
+    <a href="register.html" style="background:#4CAF50; color:white; display:block; padding:12px; margin:6px 0; text-align:center; text-decoration:none; border-radius:6px; font-weight:bold;">
+      Реєстрація
+    </a>
+    <a href="login.html" style="background:#2196F3; color:white; display:block; padding:12px; margin:6px 0; text-align:center; text-decoration:none; border-radius:6px; font-weight:bold;">
+      Вхід
+    </a>
   </div>
 </nav>
 
