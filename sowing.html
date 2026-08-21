@@ -3,161 +3,176 @@
 <head>
   <meta charset="UTF-8">
   <title>Посівна</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- адаптивність -->
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
-    h1 { color: #4CAF50; text-align: center; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #dcedc8; }
-    input { padding: 5px; margin: 5px; }
-    button { padding: 8px 12px; background: #4CAF50; color: white; border: none; cursor: pointer; margin: 5px; }
-    button:hover { background: #45a049; }
+    body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:0; }
+    h1 { color:#4CAF50; text-align:center; padding:20px; }
+    input { padding:10px; margin:5px 0; width:100%; box-sizing:border-box; }
+    button { padding:10px; background:#4CAF50; color:white; border:none; cursor:pointer; border-radius:4px; margin:5px 0; width:100%; }
+    button:hover { background:#45a049; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+    th { background-color:#dcedc8; }
+
+    @media (max-width:768px) {
+      h1 { font-size:22px; }
+      table { font-size:14px; }
+      button { font-size:16px; }
+    }
+
+    nav { background-color:#333; padding:10px; position:relative; }
+    nav button { background:none; border:none; color:white; font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px; }
+    #menuOverlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:998; }
+    #burgerMenu { 
+      display:none; position:fixed; top:0; right:0; height:100%; width:80%; max-width:300px; 
+      background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999; 
+      transition:transform 0.3s ease; transform:translateX(100%);
+    }
+    #burgerMenu a { color:white; display:block; padding:15px; text-decoration:none; font-size:20px; }
+    #burgerMenu button { background:none; border:none; color:white; font-size:28px; cursor:pointer; position:absolute; left:15px; top:15px; }
   </style>
 </head>
 <body>
- <!-- Меню-бургер -->
-<nav style="background-color:#333; padding:10px; position:relative;">
-  <!-- Іконка бургер -->
-  <button onclick="toggleMenu()" 
-          style="background:none; border:none; color:rgb(8, 8, 8); font-size:26px; cursor:pointer; position:absolute; right:10px; top:10px;">
-    ☰
-  </button>
 
-  <!-- Приховане меню (бокова панель) -->
-  <div id="burgerMenu" 
-       style="display:none; position:fixed; top:0; right:0; height:100%; width:250px; background:#222; padding:20px; box-shadow:-2px 0 5px rgba(0,0,0,0.5); z-index:999;">
-    
-    <!-- Кнопка закриття -->
-    <button onclick="toggleMenu()" 
-            style="background:none; border:none; color:white; font-size:24px; cursor:pointer; position:absolute; left:10px; top:10px;">
-      ✖
-    </button>
-
-    <a href="index.html" style="color:white; display:block; padding:10px; text-decoration:none;">Головна</a>
-    <a href="diary.html" style="color:white; display:block; padding:10px; text-decoration:none;">Щоденник</a>
-    <a href="calculator.html" style="color:white; display:block; padding:10px; text-decoration:none;">Калькулятори</a>
-    <a href="knowledge.html" style="color:white; display:block; padding:10px; text-decoration:none;">База знань</a>
-    <a href="gallery.html" style="color:white; display:block; padding:10px; text-decoration:none;">Галерея</a>
-    <a href="fields.html" style="color:white; display:block; padding:10px; text-decoration:none;">Поля</a>
-    <a href="sowing.html" style="color:white; display:block; padding:10px; text-decoration:none;">Посівна</a>
-    <a href="equipment.html" style="color:white; display:block; padding:10px; text-decoration:none;">Техніка</a>
-    <a href="expenses.html" style="color:white; display:block; padding:10px; text-decoration:none;">Витрати</a>
-    <a href="harvest.html" style="color:white; display:block; padding:10px; text-decoration:none;">Урожай</a>
-    <hr style="border:0; border-top:1px solid #555;">
+<!-- Меню-бургер -->
+<nav>
+  <button onclick="toggleMenu()">☰</button>
+  <div id="menuOverlay" onclick="toggleMenu()"></div>
+  <div id="burgerMenu">
+    <button onclick="toggleMenu()">✖</button>
+    <a href="index.html">Головна</a>
+    <a href="diary.html">Щоденник</a>
+    <a href="calculator.html">Калькулятори</a>
+    <a href="knowledge.html">База знань</a>
+    <a href="gallery.html">Галерея</a>
+    <a href="fields.html">Поля</a>
+    <a href="sowing.html">Посівна</a>
+    <a href="equipment.html">Техніка</a>
+    <a href="expenses.html">Витрати</a>
+    <a href="harvest.html">Урожай</a>
   </div>
 </nav>
+
+<h1>Таблиця посівної</h1>
+
+<div>
+  <input type="text" id="fieldName" placeholder="Назва поля">
+  <input type="number" id="area" placeholder="Площа (га)">
+  <input type="text" id="crop" placeholder="Культура">
+  <input type="text" id="seed" placeholder="Сорт/насіння">
+  <input type="number" id="cost" placeholder="Витрати (грн)">
+  <button onclick="addRow()">Додати рядок</button>
+</div>
+
+<table id="sowingTable">
+  <tr>
+    <th>Назва поля</th>
+    <th>Площа (га)</th>
+    <th>Культура</th>
+    <th>Сорт/насіння</th>
+    <th>Витрати (грн)</th>
+    <th>Дії</th>
+  </tr>
+</table>
 
 <script>
   function toggleMenu() {
     const menu = document.getElementById("burgerMenu");
-    menu.style.display = menu.style.display === "none" ? "block" : "none";
+    const overlay = document.getElementById("menuOverlay");
+    if (menu.style.display === "none" || menu.style.display === "") {
+      menu.style.display = "block";
+      overlay.style.display = "block";
+      setTimeout(() => menu.style.transform = "translateX(0)", 10);
+    } else {
+      menu.style.transform = "translateX(100%)";
+      setTimeout(() => {
+        menu.style.display = "none";
+        overlay.style.display = "none";
+      }, 300);
+    }
+  }
+
+  window.onload = function() {
+    const saved = JSON.parse(localStorage.getItem("sowingData")) || [];
+    saved.forEach(row => addRow(row, false));
+  };
+
+  function addRow(data = null, save = true) {
+    const table = document.getElementById("sowingTable");
+    const row = table.insertRow();
+
+    const fieldName = data ? data.fieldName : document.getElementById("fieldName").value;
+    const area = data ? data.area : document.getElementById("area").value;
+    const crop = data ? data.crop : document.getElementById("crop").value;
+    const seed = data ? data.seed : document.getElementById("seed").value;
+    const cost = data ? data.cost : document.getElementById("cost").value;
+
+    row.insertCell(0).innerText = fieldName;
+    row.insertCell(1).innerText = area;
+    row.insertCell(2).innerText = crop;
+    row.insertCell(3).innerText = seed;
+    row.insertCell(4).innerText = cost;
+
+    const actions = row.insertCell(5);
+    actions.innerHTML = `
+      <button onclick="editRow(this)">Редагувати</button>
+      <button onclick="deleteRow(this)">Видалити</button>
+    `;
+
+    if (save) saveData();
+
+    document.getElementById("fieldName").value = "";
+    document.getElementById("area").value = "";
+    document.getElementById("crop").value = "";
+    document.getElementById("seed").value = "";
+    document.getElementById("cost").value = "";
+  }
+
+  function editRow(button) {
+    const row = button.parentNode.parentNode;
+    const cells = row.getElementsByTagName("td");
+
+    for (let i = 0; i < cells.length - 1; i++) {
+      const value = cells[i].innerText;
+      cells[i].innerHTML = `<input value="${value}">`;
+    }
+
+    button.innerText = "Зберегти";
+    button.onclick = function() {
+      for (let i = 0; i < cells.length - 1; i++) {
+        const input = cells[i].querySelector("input");
+        cells[i].innerText = input.value;
+      }
+      button.innerText = "Редагувати";
+      button.onclick = function() { editRow(button); };
+      saveData();
+    };
+  }
+
+  function deleteRow(button) {
+    const row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+    saveData();
+  }
+
+  function saveData() {
+    const table = document.getElementById("sowingTable");
+    const rows = table.rows;
+    const data = [];
+
+    for (let i = 1; i < rows.length; i++) {
+      const cells = rows[i].cells;
+      data.push({
+        fieldName: cells[0].innerText,
+        area: cells[1].innerText,
+        crop: cells[2].innerText,
+        seed: cells[3].innerText,
+        cost: cells[4].innerText
+      });
+    }
+
+    localStorage.setItem("sowingData", JSON.stringify(data));
   }
 </script>
-
-  <h1>Таблиця посівної</h1>
-
-  <div>
-    <input type="text" id="fieldName" placeholder="Назва поля">
-    <input type="number" id="area" placeholder="Площа (га)">
-    <input type="text" id="crop" placeholder="Культура">
-    <input type="text" id="seed" placeholder="Сорт/насіння">
-    <input type="number" id="cost" placeholder="Витрати (грн)">
-    <button onclick="addRow()">Додати рядок</button>
-  </div>
-
-  <table id="sowingTable">
-    <tr>
-      <th>Назва поля</th>
-      <th>Площа (га)</th>
-      <th>Культура</th>
-      <th>Сорт/насіння</th>
-      <th>Витрати (грн)</th>
-      <th>Дії</th>
-    </tr>
-  </table>
-
-  <script>
-    window.onload = function() {
-      const saved = JSON.parse(localStorage.getItem("sowingData")) || [];
-      saved.forEach(row => addRow(row, false));
-    };
-
-    function addRow(data = null, save = true) {
-      const table = document.getElementById("sowingTable");
-      const row = table.insertRow();
-
-      const fieldName = data ? data.fieldName : document.getElementById("fieldName").value;
-      const area = data ? data.area : document.getElementById("area").value;
-      const crop = data ? data.crop : document.getElementById("crop").value;
-      const seed = data ? data.seed : document.getElementById("seed").value;
-      const cost = data ? data.cost : document.getElementById("cost").value;
-
-      row.insertCell(0).innerText = fieldName;
-      row.insertCell(1).innerText = area;
-      row.insertCell(2).innerText = crop;
-      row.insertCell(3).innerText = seed;
-      row.insertCell(4).innerText = cost;
-
-      const actions = row.insertCell(5);
-      actions.innerHTML = `
-        <button onclick="editRow(this)">Редагувати</button>
-        <button onclick="deleteRow(this)">Видалити</button>
-      `;
-
-      if (save) saveData();
-
-      document.getElementById("fieldName").value = "";
-      document.getElementById("area").value = "";
-      document.getElementById("crop").value = "";
-      document.getElementById("seed").value = "";
-      document.getElementById("cost").value = "";
-    }
-
-    function editRow(button) {
-      const row = button.parentNode.parentNode;
-      const cells = row.getElementsByTagName("td");
-
-      for (let i = 0; i < cells.length - 1; i++) {
-        const value = cells[i].innerText;
-        cells[i].innerHTML = `<input value="${value}">`;
-      }
-
-      button.innerText = "Зберегти";
-      button.onclick = function() {
-        for (let i = 0; i < cells.length - 1; i++) {
-          const input = cells[i].querySelector("input");
-          cells[i].innerText = input.value;
-        }
-        button.innerText = "Редагувати";
-        button.onclick = function() { editRow(button); };
-        saveData();
-      };
-    }
-
-    function deleteRow(button) {
-      const row = button.parentNode.parentNode;
-      row.parentNode.removeChild(row);
-      saveData();
-    }
-
-    function saveData() {
-      const table = document.getElementById("sowingTable");
-      const rows = table.rows;
-      const data = [];
-
-      for (let i = 1; i < rows.length; i++) {
-        const cells = rows[i].cells;
-        data.push({
-          fieldName: cells[0].innerText,
-          area: cells[1].innerText,
-          crop: cells[2].innerText,
-          seed: cells[3].innerText,
-          cost: cells[4].innerText
-        });
-      }
-
-      localStorage.setItem("sowingData", JSON.stringify(data));
-    }
-  </script>
 </body>
 </html>
